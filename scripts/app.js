@@ -52,3 +52,26 @@ header.innerHTML = `<nav class="navbar navbar-expand-lg bg-info-subtle">
     </div>
   </div>
 </nav>`;
+
+function renderProductos(productos, containerid) {
+  const containerCard = document.getElementById(containerid);
+  containerCard.innerHTML = "";
+  containerCard.classList.add("row", "g-3");
+  productos.forEach((item) => {
+    const card = document.createElement("div");
+    card.classList.add("col-md-4");
+    card.innerHTML = `
+    <div class="card d-flex" style="width: 18rem;">
+      <img src="${item.imagen}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">${item.nombre}</h5>
+        <p class="card-text">Some quick example text to build on the card title.</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>
+    `;
+    containerCard.appendChild(card);
+  });
+}
+//llamo funcion pasando productos y el id del card-container
+renderProductos(productos, "jsCard");
