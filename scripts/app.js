@@ -3,11 +3,11 @@ console.log("hola");
 const productos = [];
 class Producto {
   static ultimoId = 1;
-  constructor(nombre, precio, cantidad, descripcion, imagen) {
+  constructor(nombre, precio, stock, descripcion, imagen) {
     (this.id = Producto.ultimoId++),
       (this.nombre = nombre),
       (this.precio = precio),
-      (this.cantidad = cantidad),
+      (this.stock = stock),
       (this.descripcion = descripcion), // Agregamos la descripción
       (this.imagen = imagen); // Agregamos la URL de la imagen
   }
@@ -85,7 +85,17 @@ const nuevosProductos = [
     imagen: "./imagenes/8camisa.jpg",
   },
 ];
-productos.push(...nuevosProductos);
+nuevosProductos.forEach((prod) => {
+  productos.push(
+    new Producto(
+      prod.nombre,
+      prod.precio,
+      prod.stock,
+      prod.descripcion,
+      prod.imagen
+    )
+  );
+});
 // render header
 const header = document.querySelector("#jsheader");
 header.innerHTML = `<nav class="navbar navbar-expand-lg bg-info-subtle">
@@ -124,12 +134,42 @@ function renderProductos(productos, containerid) {
         <h5 class="card-title">${item.nombre}</h5>
         <p class="card-text">${item.descripcion}</p>
         <p class="card-text">Precio: $${item.precio}</p>
-        <a href="./cart.html" class="btn btn-primary">Comprar</a>
+        <button class="btn btn-outline-secondary add-to-cart" data-id="${item.id}">
+            Comprar
+        </button>
       </div>
-    </div>
+    </div>  
     `;
     containerCard.appendChild(card);
   });
 }
+
+function cartSetLocalS(productos) {
+  //capturo cada product card
+  const containerCard = document.getElementById("jsCard");
+  containerCard.addEventListener("click", (event) => {
+    if (event.target.classList.contains("add-to-cart")) {
+      const productId = event.target.getAttribute("data-id");
+
+      const product = productos.find((prod) => {
+        return prod.id === Number(productId);
+      });
+
+      if (product) {
+        let arrCart = JSON.parse(localStorage.getItem("cartValues")) || [];
+
+        // Agregar el producto al carrito
+        arrCart.push(product);
+        // Guardar el carrito actualizado
+        localStorage.setItem("cartValues", JSON.stringify(arrCart));
+        alert("producto agregado");
+      } else {
+        alert("no encontrado");
+      }
+    }
+  });
+}
 //llamo funcion pasando productos y el id del card-container
 renderProductos(productos, "jsCard");
+// guardar en local storage
+cartSetLocalS(productos);
