@@ -56,6 +56,7 @@ function setBotones(params) {
 
       localStorage.setItem("cartValues", JSON.stringify(productoCart));
       renderCart();
+      finazarCompra();
     });
   });
   // funcion restar
@@ -67,6 +68,7 @@ function setBotones(params) {
         productoCart[index].cantidad--;
         localStorage.setItem("cartValues", JSON.stringify(productoCart));
         renderCart();
+        finazarCompra();
       }
     });
   });
@@ -110,8 +112,8 @@ function finazarCompra(params) {
             <h5 class="card-title">Resumen de compra</h5>
             <p class="card-text"><strong>Productos:</strong> ${totalProd}</p>
             <p class="card-text"><strong>Total compra:</strong> $${totalCompra}</p>
-            <button class="btn btn-secondary btn-sm ">Confirmar</button>
-            <button class="btn btn-secondary btn-sm ">Cancelar</button>
+            <button class="btn btn-secondary btn-sm btn-confirmar ">Confirmar</button>
+            <button class="btn btn-secondary btn-sm btn-cancelar ">Cancelar</button>
           </div>
         </div>
         `;
@@ -127,7 +129,9 @@ function finazarCompra(params) {
 
       btnCancelar.addEventListener("click", () => {
         alert("Compra cancelada.");
+        localStorage.removeItem("cartValues"); // Limpia el carrito
         cartConfirm.innerHTML = ""; // Limpia el resumen
+        location.reload();
       });
     }
   }
