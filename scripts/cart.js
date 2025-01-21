@@ -1,4 +1,3 @@
-console.log("hola desde cart");
 // renderizacion del cart
 function renderCart(params) {
   const productosCart = JSON.parse(localStorage.getItem("cartValues")) || [];
@@ -122,16 +121,22 @@ function finazarCompra(params) {
       const btnCancelar = compra.querySelector(".btn-cancelar");
 
       btnConfirmar.addEventListener("click", () => {
-        alert("¡Compra confirmada! Gracias por tu compra.");
-        localStorage.removeItem("cartValues"); // Limpia el carrito
-        location.reload(); // Recarga la página
+        toastSetter("¡Compra confirmada! Gracias por tu compra");
+
+        localStorage.removeItem("cartValues");
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
       });
 
       btnCancelar.addEventListener("click", () => {
-        alert("Compra cancelada.");
+        toastSetter("La compra ha sido cancelada");
+
         localStorage.removeItem("cartValues"); // Limpia el carrito
         cartConfirm.innerHTML = ""; // Limpia el resumen
-        location.reload();
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
       });
     }
   }

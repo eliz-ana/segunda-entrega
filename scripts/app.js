@@ -1,4 +1,3 @@
-console.log("hola");
 //generacion de productos----
 const productos = [];
 class Producto {
@@ -66,7 +65,7 @@ const nuevosProductos = [
   {
     stock: 10,
     nombre: "pantalon",
-    descripcion: "jean azul obscuro",
+    descripcion: "jean azul oscuro",
     precio: 23000,
     imagen: "./imagenes/9pantalonPortada.jpg",
     cantidad: 1,
@@ -154,7 +153,7 @@ function renderProductos(productos, containerid) {
         <h5 class="card-title">${item.nombre}</h5>
         <p class="card-text">${item.descripcion}</p>
         <p class="card-text">Precio: $${item.precio}</p>
-        <button class="btn btn-outline-secondary add-to-cart" data-id="${item.id}">
+        <button class="btn btn-outline-success add-to-cart" data-id="${item.id}">
             Comprar
         </button>
       </div>
@@ -164,7 +163,7 @@ function renderProductos(productos, containerid) {
     });
   }
 }
-
+//setear local storage
 function cartSetLocalS(productos) {
   //capturo cada product card
   const containerCard = document.getElementById("jsCard");
@@ -184,12 +183,32 @@ function cartSetLocalS(productos) {
           arrCart.push(product);
           // Guardar el carrito actualizado
           localStorage.setItem("cartValues", JSON.stringify(arrCart));
-          alert("producto agregado");
+          toastSetter("Se agrego al carrito!");
         } else {
-          alert("no encontrado");
+          toastSetter("Producto no encontrado");
         }
       }
     });
+  }
+}
+function toastSetter(mensaje) {
+  const toastContainer = document.getElementById("jsToastContainer");
+  if (toastContainer) {
+    const toast = document.createElement("div");
+    toast.className = "toast text-bg-success border-0 show";
+    toast.role = "alert";
+    toast.ariaLive = "assertive";
+    toast.ariaAtomic = "true";
+    toast.innerHTML = `
+    <div class="toast-body">
+        ${mensaje}
+      </div>
+      
+    `;
+    toastContainer.appendChild(toast);
+    setTimeout(() => {
+      toast.remove();
+    }, 2000);
   }
 }
 renderHeader();
