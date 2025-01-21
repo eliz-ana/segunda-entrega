@@ -162,8 +162,6 @@ function renderProductos(productos, containerid) {
     `;
       containerCard.appendChild(card);
     });
-  } else {
-    console.log(" el contenedor no existe ");
   }
 }
 
@@ -192,8 +190,6 @@ function cartSetLocalS(productos) {
         }
       }
     });
-  } else {
-    console.log("el contenedor jsCard no existe");
   }
 }
 renderHeader();
