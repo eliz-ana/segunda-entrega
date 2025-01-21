@@ -3,11 +3,12 @@ console.log("hola");
 const productos = [];
 class Producto {
   static ultimoId = 1;
-  constructor(nombre, precio, stock, descripcion, imagen) {
+  constructor(nombre, precio, stock, cantidad, descripcion, imagen) {
     (this.id = Producto.ultimoId++),
       (this.nombre = nombre),
       (this.precio = precio),
       (this.stock = stock),
+      (this.cantidad = cantidad),
       (this.descripcion = descripcion), // Agregamos la descripción
       (this.imagen = imagen); // Agregamos la URL de la imagen
   }
@@ -20,6 +21,7 @@ const nuevosProductos = [
     descripcion: "remera estampada",
     precio: 7000,
     imagen: "./imagenes/10remera.jpg",
+    cantidad: 1,
   },
   {
     stock: 10,
@@ -27,6 +29,7 @@ const nuevosProductos = [
     descripcion: "remera gris",
     precio: 7000,
     imagen: "./imagenes/2remera-gris.jpg",
+    cantidad: 1,
   },
   {
     stock: 10,
@@ -34,6 +37,7 @@ const nuevosProductos = [
     descripcion: "remera blanca",
     precio: 6000,
     imagen: "./imagenes/1camiseta-blanca.jpg",
+    cantidad: 1,
   },
   {
     stock: 10,
@@ -41,6 +45,7 @@ const nuevosProductos = [
     descripcion: "camisa blanca",
     precio: 16000,
     imagen: "./imagenes/3camisa-blanca.jpg",
+    cantidad: 1,
   },
   {
     stock: 10,
@@ -48,6 +53,7 @@ const nuevosProductos = [
     descripcion: "jean claro",
     precio: 26000,
     imagen: "./imagenes/5pantalon-jean.jpg",
+    cantidad: 1,
   },
   {
     stock: 10,
@@ -55,6 +61,7 @@ const nuevosProductos = [
     descripcion: "jean clasico",
     precio: 25000,
     imagen: "./imagenes/4pantalon-jean.jpg",
+    cantidad: 1,
   },
   {
     stock: 10,
@@ -62,6 +69,7 @@ const nuevosProductos = [
     descripcion: "jean azul obscuro",
     precio: 23000,
     imagen: "./imagenes/9pantalonPortada.jpg",
+    cantidad: 1,
   },
   {
     stock: 10,
@@ -69,6 +77,7 @@ const nuevosProductos = [
     descripcion: "bermuda beige ",
     precio: 16000,
     imagen: "./imagenes/7bermudaBeige.jpg",
+    cantidad: 1,
   },
   {
     stock: 10,
@@ -76,6 +85,7 @@ const nuevosProductos = [
     descripcion: "bermuda negra",
     precio: 18000,
     imagen: "./imagenes/6bermuda.jpg",
+    cantidad: 1,
   },
   {
     stock: 10,
@@ -83,6 +93,7 @@ const nuevosProductos = [
     descripcion: "camisa azul",
     precio: 16000,
     imagen: "./imagenes/8camisa.jpg",
+    cantidad: 1,
   },
 ];
 nuevosProductos.forEach((prod) => {
@@ -91,14 +102,17 @@ nuevosProductos.forEach((prod) => {
       prod.nombre,
       prod.precio,
       prod.stock,
+      prod.cantidad,
       prod.descripcion,
       prod.imagen
     )
   );
 });
 // render header
-const header = document.querySelector("#jsheader");
-header.innerHTML = `<nav class="navbar navbar-expand-lg bg-info-subtle">
+function renderHeader(params) {
+  const header = document.querySelector("#jsheader");
+  if (header) {
+    header.innerHTML = `<nav class="navbar navbar-expand-lg bg-info-subtle">
   <div class="container-fluid">
     <a class="navbar-brand" href="./index.html">Super Shop</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,15 +132,21 @@ header.innerHTML = `<nav class="navbar navbar-expand-lg bg-info-subtle">
     </div>
   </div>
 </nav>`;
+  } else {
+    console.log("el elemento con id jsheader no existe");
+  }
+}
+
 // render cards de productos
 function renderProductos(productos, containerid) {
   const containerCard = document.getElementById(containerid);
-  containerCard.innerHTML = "";
-  containerCard.classList.add("row", "g-3");
-  productos.forEach((item) => {
-    const card = document.createElement("div");
-    card.classList.add("col-md-4");
-    card.innerHTML = `
+  if (containerCard) {
+    containerCard.innerHTML = "";
+    containerCard.classList.add("row", "g-3");
+    productos.forEach((item) => {
+      const card = document.createElement("div");
+      card.classList.add("col-md-4");
+      card.innerHTML = `
     <div class="card  img-fluid" style="width: 18rem;">
       <img src="${item.imagen}" class="card-img-top img-fluid" alt="..."
        style="height: 200px; object-fit: cover;">
@@ -140,35 +160,43 @@ function renderProductos(productos, containerid) {
       </div>
     </div>  
     `;
-    containerCard.appendChild(card);
-  });
+      containerCard.appendChild(card);
+    });
+  } else {
+    console.log(" el contenedor no existe ");
+  }
 }
 
 function cartSetLocalS(productos) {
   //capturo cada product card
   const containerCard = document.getElementById("jsCard");
-  containerCard.addEventListener("click", (event) => {
-    if (event.target.classList.contains("add-to-cart")) {
-      const productId = event.target.getAttribute("data-id");
+  if (containerCard) {
+    containerCard.addEventListener("click", (event) => {
+      if (event.target.classList.contains("add-to-cart")) {
+        const productId = event.target.getAttribute("data-id");
 
-      const product = productos.find((prod) => {
-        return prod.id === Number(productId);
-      });
+        const product = productos.find((prod) => {
+          return prod.id === Number(productId);
+        });
 
-      if (product) {
-        let arrCart = JSON.parse(localStorage.getItem("cartValues")) || [];
+        if (product) {
+          let arrCart = JSON.parse(localStorage.getItem("cartValues")) || [];
 
-        // Agregar el producto al carrito
-        arrCart.push(product);
-        // Guardar el carrito actualizado
-        localStorage.setItem("cartValues", JSON.stringify(arrCart));
-        alert("producto agregado");
-      } else {
-        alert("no encontrado");
+          // Agregar el producto al carrito
+          arrCart.push(product);
+          // Guardar el carrito actualizado
+          localStorage.setItem("cartValues", JSON.stringify(arrCart));
+          alert("producto agregado");
+        } else {
+          alert("no encontrado");
+        }
       }
-    }
-  });
+    });
+  } else {
+    console.log("el contenedor jsCard no existe");
+  }
 }
+renderHeader();
 //llamo funcion pasando productos y el id del card-container
 renderProductos(productos, "jsCard");
 // guardar en local storage
