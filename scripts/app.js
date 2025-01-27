@@ -123,8 +123,8 @@ function renderHeader(params) {
         <a class="nav-link" href="./nosotros.html">Nosotros</a>
         <a class="nav-link" href="./contactos.html">Contacto</a>
       </div>
-       <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+       <form id="searchForm" class="d-flex" role="search">
+          <input id="searchInput" class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
           <button class="btn btn-outline-secondary" type="submit">buscar</button>
         </form>
          <a href="./cart.html" class="btn btn-dark ms-auto cart-btn">Cart </a>
@@ -224,9 +224,29 @@ function contadorCart(params) {
     jsCartBtn.textContent = `Cart (${cartValues.length})`;
   }
 }
+function buscador(productos, renderProductos, containerid) {
+  const jsSearchForm = document.getElementById("searchForm");
+  const jsSearchInput = document.getElementById("searchInput");
+  if (jsSearchForm) {
+    jsSearchForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const query = jsSearchInput.value.trim().toLowerCase();
+
+      const queryResult = productos.filter((prod) => {
+        console.log("que tiene prod : ", prod);
+        return prod.nombre.toLowerCase().includes(query);
+      });
+
+      renderProductos(queryResult, containerid);
+    });
+  }
+}
+
 renderHeader();
 //llamo funcion pasando productos y el id del card-container
 renderProductos(productos, "jsCard");
+buscador(productos, renderProductos, "jsCard");
 contadorCart();
 // guardar en local storage
 cartSetLocalS(productos);
