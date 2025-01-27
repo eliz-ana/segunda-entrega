@@ -127,7 +127,7 @@ function renderHeader(params) {
           <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
           <button class="btn btn-outline-secondary" type="submit">buscar</button>
         </form>
-         <a href="./cart.html" class="btn btn-dark ms-auto">Cart </a>
+         <a href="./cart.html" class="btn btn-dark ms-auto cart-btn">Cart </a>
     </div>
   </div>
 </nav>`;
@@ -165,6 +165,8 @@ function renderProductos(productos, containerid) {
 }
 //setear local storage
 function cartSetLocalS(productos) {
+  //capturo cart-btn
+  const jsCartBtn = document.getElementsByClassName(".cart-btn");
   //capturo cada product card
   const containerCard = document.getElementById("jsCard");
   if (containerCard) {
@@ -181,8 +183,10 @@ function cartSetLocalS(productos) {
 
           // Agregar el producto al carrito
           arrCart.push(product);
+
           // Guardar el carrito actualizado
           localStorage.setItem("cartValues", JSON.stringify(arrCart));
+          contadorCart();
           toastSetter("Se agrego al carrito!");
         } else {
           toastSetter("Producto no encontrado");
@@ -191,6 +195,7 @@ function cartSetLocalS(productos) {
     });
   }
 }
+//generador de toasts
 function toastSetter(mensaje) {
   const toastContainer = document.getElementById("jsToastContainer");
   if (toastContainer) {
@@ -211,8 +216,17 @@ function toastSetter(mensaje) {
     }, 2000);
   }
 }
+//actualizar contador del cart
+function contadorCart(params) {
+  const jsCartBtn = document.querySelector(".cart-btn");
+  const cartValues = JSON.parse(localStorage.getItem("cartValues")) || [];
+  if (jsCartBtn) {
+    jsCartBtn.textContent = `Cart (${cartValues.length})`;
+  }
+}
 renderHeader();
 //llamo funcion pasando productos y el id del card-container
 renderProductos(productos, "jsCard");
+contadorCart();
 // guardar en local storage
 cartSetLocalS(productos);
