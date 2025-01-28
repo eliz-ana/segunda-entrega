@@ -111,8 +111,8 @@ function finazarCompra(params) {
             <h5 class="card-title">Resumen de compra</h5>
             <p class="card-text"><strong>Productos:</strong> ${totalProd}</p>
             <p class="card-text"><strong>Total compra:</strong> $${totalCompra}</p>
-            <button class="btn btn-secondary btn-sm btn-confirmar ">Confirmar</button>
-            <button class="btn btn-secondary btn-sm btn-cancelar ">Cancelar</button>
+            <button class="btn btn-success btn-sm btn-confirmar ">Confirmar</button>
+            <button class="btn btn-danger btn-sm btn-cancelar ">Cancelar</button>
           </div>
         </div>
         `;

@@ -135,7 +135,28 @@ function renderHeader(params) {
     console.log("el elemento con id jsheader no existe");
   }
 }
-
+function renderFooter(params) {
+  const footer = document.querySelector("#jsFooter");
+  if (footer) {
+    footer.innerHTML = `
+    <nav class="navbar fixed-bottom  bg-info-subtle">
+      <div class="container text-center ">
+        <h5 class="mx-auto">SuperShop</h5>
+      </div>
+      <div class="container text-center mx-auto">
+        <p class="fs-5">Contactos:</p>
+        <a href="https://www.facebook.com" target="_blank"><i class="bi bi-facebook"></i></a>
+        <a href="https://www.instagram.com" target="_blank"><i class="bi bi-instagram"></i></a>
+        <a href="#" target="_blank"><i class="bi bi-whatsapp"></i></a>
+        <a href="#" target="_blank"><i class="bi bi-envelope-at"></i></a>
+      </div>
+      <div class=" container text-center">
+          <p class="fw-light mx-auto">&copy; 2025 Super Shop. Todos los derechos reservados.</p>
+      </div
+    </nav>
+    `;
+  }
+}
 // render cards de productos
 function renderProductos(productos, containerid) {
   const containerCard = document.getElementById(containerid);
@@ -224,6 +245,7 @@ function contadorCart(params) {
     jsCartBtn.textContent = `Cart (${cartValues.length})`;
   }
 }
+
 function buscador(productos, renderProductos, containerid) {
   const jsSearchForm = document.getElementById("searchForm");
   const jsSearchInput = document.getElementById("searchInput");
@@ -234,7 +256,6 @@ function buscador(productos, renderProductos, containerid) {
       const query = jsSearchInput.value.trim().toLowerCase();
 
       const queryResult = productos.filter((prod) => {
-        console.log("que tiene prod : ", prod);
         return prod.nombre.toLowerCase().includes(query);
       });
 
@@ -244,6 +265,7 @@ function buscador(productos, renderProductos, containerid) {
 }
 
 renderHeader();
+renderFooter();
 //llamo funcion pasando productos y el id del card-container
 renderProductos(productos, "jsCard");
 buscador(productos, renderProductos, "jsCard");
