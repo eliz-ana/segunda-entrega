@@ -139,7 +139,7 @@ function renderFooter(params) {
   const footer = document.querySelector("#jsFooter");
   if (footer) {
     footer.innerHTML = `
-    <nav class="navbar fixed-bottom  bg-info-subtle">
+    <nav class="navbar sticky-bottom mt-auto bg-info-subtle">
       <div class="container text-center ">
         <h5 class="mx-auto">SuperShop</h5>
       </div>
@@ -258,8 +258,11 @@ function buscador(productos, renderProductos, containerid) {
       const queryResult = productos.filter((prod) => {
         return prod.nombre.toLowerCase().includes(query);
       });
-
-      renderProductos(queryResult, containerid);
+      if (queryResult.length > 0) {
+        renderProductos(queryResult, containerid);
+      } else {
+        renderProductos(productos, containerid);
+      }
     });
   }
 }
