@@ -1,112 +1,5 @@
-//generacion de productos----
-const productos = [];
-class Producto {
-  static ultimoId = 1;
-  constructor(nombre, precio, stock, cantidad, descripcion, imagen) {
-    (this.id = Producto.ultimoId++),
-      (this.nombre = nombre),
-      (this.precio = precio),
-      (this.stock = stock),
-      (this.cantidad = cantidad),
-      (this.descripcion = descripcion), // Agregamos la descripción
-      (this.imagen = imagen); // Agregamos la URL de la imagen
-  }
-}
-//productos
-const nuevosProductos = [
-  {
-    stock: 10,
-    nombre: "remera",
-    descripcion: "remera estampada",
-    precio: 7000,
-    imagen: "./imagenes/10remera.jpg",
-    cantidad: 1,
-  },
-  {
-    stock: 10,
-    nombre: "remera",
-    descripcion: "remera gris",
-    precio: 7000,
-    imagen: "./imagenes/2remera-gris.jpg",
-    cantidad: 1,
-  },
-  {
-    stock: 10,
-    nombre: "remera",
-    descripcion: "remera blanca",
-    precio: 6000,
-    imagen: "./imagenes/1camiseta-blanca.jpg",
-    cantidad: 1,
-  },
-  {
-    stock: 10,
-    nombre: "camisa",
-    descripcion: "camisa blanca",
-    precio: 16000,
-    imagen: "./imagenes/3camisa-blanca.jpg",
-    cantidad: 1,
-  },
-  {
-    stock: 10,
-    nombre: "pantalon",
-    descripcion: "jean claro",
-    precio: 26000,
-    imagen: "./imagenes/5pantalon-jean.jpg",
-    cantidad: 1,
-  },
-  {
-    stock: 10,
-    nombre: "pantalon",
-    descripcion: "jean clasico",
-    precio: 25000,
-    imagen: "./imagenes/4pantalon-jean.jpg",
-    cantidad: 1,
-  },
-  {
-    stock: 10,
-    nombre: "pantalon",
-    descripcion: "jean azul oscuro",
-    precio: 23000,
-    imagen: "./imagenes/9pantalonPortada.jpg",
-    cantidad: 1,
-  },
-  {
-    stock: 10,
-    nombre: "bermuda",
-    descripcion: "bermuda beige ",
-    precio: 16000,
-    imagen: "./imagenes/7bermudaBeige.jpg",
-    cantidad: 1,
-  },
-  {
-    stock: 10,
-    nombre: "bermuda",
-    descripcion: "bermuda negra",
-    precio: 18000,
-    imagen: "./imagenes/6bermuda.jpg",
-    cantidad: 1,
-  },
-  {
-    stock: 10,
-    nombre: "camisa",
-    descripcion: "camisa azul",
-    precio: 16000,
-    imagen: "./imagenes/8camisa.jpg",
-    cantidad: 1,
-  },
-];
-nuevosProductos.forEach((prod) => {
-  productos.push(
-    new Producto(
-      prod.nombre,
-      prod.precio,
-      prod.stock,
-      prod.cantidad,
-      prod.descripcion,
-      prod.imagen
-    )
-  );
-});
+let productos = [];
+
 // render header
 function renderHeader(params) {
   const header = document.querySelector("#jsheader");
@@ -135,6 +28,7 @@ function renderHeader(params) {
     console.log("el elemento con id jsheader no existe");
   }
 }
+//render footer
 function renderFooter(params) {
   const footer = document.querySelector("#jsFooter");
   if (footer) {
@@ -156,6 +50,26 @@ function renderFooter(params) {
     </nav>
     `;
   }
+}
+//fetch de los productos
+async function getData() {
+  try {
+    const respuesta = await fetch("./json/data.json");
+    if (!respuesta.ok) {
+      throw new Error(`error en el json: ${respuesta.status}`);
+    }
+    return await respuesta.json();
+  } catch (error) {
+    console.error("Error al obtener los productos:", error);
+    return [];
+  }
+}
+//funcion con await
+async function iniciarProductos(params) {
+  productos = await getData();
+  renderProductos(productos, "jsCard");
+  cartSetLocalS();
+  buscador(productos, renderProductos, "jsCard");
 }
 // render cards de productos
 function renderProductos(productos, containerid) {
@@ -185,9 +99,7 @@ function renderProductos(productos, containerid) {
   }
 }
 //setear local storage
-function cartSetLocalS(productos) {
-  //capturo cart-btn
-  const jsCartBtn = document.getElementsByClassName(".cart-btn");
+function cartSetLocalS() {
   //capturo cada product card
   const containerCard = document.getElementById("jsCard");
   if (containerCard) {
@@ -245,7 +157,7 @@ function contadorCart(params) {
     jsCartBtn.textContent = `Cart (${cartValues.length})`;
   }
 }
-
+//funcion para buscar productos
 function buscador(productos, renderProductos, containerid) {
   const jsSearchForm = document.getElementById("searchForm");
   const jsSearchInput = document.getElementById("searchInput");
@@ -263,15 +175,11 @@ function buscador(productos, renderProductos, containerid) {
       } else {
         renderProductos(productos, containerid);
       }
+      jsSearchInput.value = "";
     });
   }
 }
-
+iniciarProductos();
 renderHeader();
 renderFooter();
-//llamo funcion pasando productos y el id del card-container
-renderProductos(productos, "jsCard");
-buscador(productos, renderProductos, "jsCard");
 contadorCart();
-// guardar en local storage
-cartSetLocalS(productos);

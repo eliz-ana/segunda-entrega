@@ -83,6 +83,7 @@ function setBotones(params) {
     });
   });
 }
+//funcion para confirmar o cancelar compra
 function finazarCompra(params) {
   const productosCart = JSON.parse(localStorage.getItem("cartValues")) || [];
   const cartConfirm = document.querySelector("#jsFinCompra");
